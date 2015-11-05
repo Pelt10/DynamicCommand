@@ -23,7 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @param plugin The JavaPlugin of the Plugin who register this command
  */
 public class DCommand extends BukkitCommand{
-	CommandExecutor executor;
+	protected CommandExecutor executor;
 	
 	protected DCommand(String name, String usage, String description,String permission, ArrayList<String> aliases, CommandExecutor executor, JavaPlugin plugin) {
             super(name, description, usage, aliases);
