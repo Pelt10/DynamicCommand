@@ -36,7 +36,7 @@ public class DCommand extends BukkitCommand{
 	@Override
 	public boolean execute(CommandSender sender, String label, String[] args) {
 		if(executor != null)
-		return	executor.onCommand(sender, this, label, args);
+	            return executor.onCommand(sender, this, label, args);
 	}
 	
 	
