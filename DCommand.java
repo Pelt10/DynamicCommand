@@ -24,19 +24,19 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class DCommand extends BukkitCommand{
 	CommandExecutor executor;
+	
 	protected DCommand(String name, String usage, String description,String permission, ArrayList<String> aliases, CommandExecutor executor, JavaPlugin plugin) {
-        super(name, description, usage, aliases);
-        this.setPermission(permission);
-        this.executor = executor;
+            super(name, description, usage, aliases);
+            this.setPermission(permission);
+            this.executor = executor;
         
-        ((CraftServer) Bukkit.getServer()).getCommandMap().register(name, plugin.getName(), this);
+            ((CraftServer) Bukkit.getServer()).getCommandMap().register(name, plugin.getName(), this);
 	}
 	
 	@Override
 	public boolean execute(CommandSender sender, String label, String[] args) {
 		if(executor != null)
-			executor.onCommand(sender, this, label, args);
-		return false;
+		return	executor.onCommand(sender, this, label, args);
 	}
 	
 	
