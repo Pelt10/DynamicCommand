@@ -1,18 +1,19 @@
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
 import java.util.Objects;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
-import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * This class provide you to register a command without the plugin.yml and change the commandExecutor dynamically
  * @author pelt10
- * @version 1.1
+ * @version 1.2
  */
 public class DCommand extends BukkitCommand {
     private CommandExecutor executor;
@@ -45,7 +46,15 @@ public class DCommand extends BukkitCommand {
     }
 
     private void registerCommand(JavaPlugin plugin) {
-	((CraftServer) Bukkit.getServer()).getCommandMap().register(getName(), plugin.getName(), this);
+	String bukkitVersion = Bukkit.getServer().getClass().getPackage().getName();
+	try {
+	    Class<?> clazzCraftServer = Class.forName("org.bukkit.craftbukkit." + bukkitVersion.substring(bukkitVersion.lastIndexOf('.') + 1) + ".CraftServer");
+	    Object craftServer = clazzCraftServer.cast(Bukkit.getServer());
+	    Object commandMap = craftServer.getClass().getDeclaredMethod("getCommandMap").invoke(craftServer);
+	    commandMap.getClass().getDeclaredMethod("register", String.class, String.class, Command.class).invoke(commandMap, getName(), plugin.getName(), this);
+	} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+	    Bukkit.getLogger().log(Level.SEVERE, e.getMessage(), e);
+	}
     }
 
     @Override
