@@ -62,7 +62,9 @@ public class DCommand extends BukkitCommand {
 	if (Objects.isNull(executor)) {
 	    throw new IllegalStateException("The executor for command " + getName() + " is null !");
 	}
-	return executor.onCommand(sender, this, label, args);
+	if(testPermission(sender))
+	    return executor.onCommand(sender, this, label, args);
+	return true;
     }
     
     /**
